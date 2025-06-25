@@ -1,0 +1,49 @@
+{
+  "expo": {
+    "name": "gerencia_email",
+    "slug": "gerencia_email",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/gmail.png",
+    "scheme": "gerenciaemail",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/gmail.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "package": "com.giuseph.gerencia_email"
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/gmail.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/gmail.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "d7f410a7-ce97-4969-ac76-dfe2762a7a76"
+      }
+    }
+  }
+}
