@@ -1,0 +1,1 @@
+zip -r acessar.zip node_modules/ public/ .env package-lock.json package.json server.js

@@ -31,14 +31,38 @@ def baixar_zip(url, destino):
 def main():
     if not check_node():
         print("Node.js não está instalado! Execute primeiro o script de instalação do Node.js.")
-        input("Pressione Enter para sair...")
         sys.exit(1)
 
     user_dir = os.path.expanduser("~")
     os.chdir(user_dir)
-    if os.path.exists("acessar"):
+    acessar_dir = os.path.join("C:\\", "acessar")
+    server_js = os.path.join(acessar_dir, "server.js")
+
+    if os.path.exists(server_js):
+        print(f"O arquivo {server_js} já existe. Pulando download e extração do zip.")
+        print("Instalando dependências do projeto...")
+        os.chdir(acessar_dir)
+        print("Iniciando servidor...")
+        try:
+            DETACHED = getattr(subprocess, 'DETACHED_PROCESS', 0x00000008)
+            with open('server.log', 'w') as log:
+                subprocess.Popen(
+                    ['node', 'server.js'],
+                    cwd=acessar_dir,
+                    creationflags=DETACHED,
+                    stdout=log,
+                    stderr=log,
+                    close_fds=True
+                )
+            print("Servidor iniciado com sucesso!")
+        except Exception as e:
+            print("Erro ao iniciar o servidor:", e)
+        return
+
+    # Caso não exista, faz download e extração normalmente
+    if os.path.exists(acessar_dir):
         print("Removendo pasta existente C:\\acessar...")
-        shutil.rmtree("acessar", ignore_errors=True)
+        shutil.rmtree(acessar_dir, ignore_errors=True)
 
     zip_path = os.path.join(user_dir, "acessar.zip")
     if os.path.exists(zip_path):
@@ -48,30 +72,28 @@ def main():
 
     print("Descompactando o projeto...")
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-        zip_ref.extractall("C:\\acessar")
+        zip_ref.extractall(acessar_dir)
 
     os.remove(zip_path)
     print("Projeto extraído em C:\\acessar")
 
-    print("Instalando dependências do projeto...")
-    os.chdir("C:\\acessar")
-    try:
-        subprocess.check_call(['npm', 'install'])
-    except Exception as e:
-        print("Erro ao instalar dependências:", e)
-        input("Pressione Enter para sair...")
-        sys.exit(1)
-
+    os.chdir(acessar_dir)
     print("Dependências instaladas com sucesso!")
-
     print("Iniciando servidor...")
     try:
-        subprocess.Popen(['node', 'acessar/server.js'], cwd="C:\\acessar")
+        DETACHED = getattr(subprocess, 'DETACHED_PROCESS', 0x00000008)
+        with open('server.log', 'w') as log:
+            subprocess.Popen(
+                ['node', 'server.js'],
+                cwd=acessar_dir,
+                creationflags=DETACHED,
+                stdout=log,
+                stderr=log,
+                close_fds=True
+            )
         print("Servidor iniciado com sucesso!")
     except Exception as e:
         print("Erro ao iniciar o servidor:", e)
-
-    input("Pressione Enter para sair...")
 
 if __name__ == '__main__':
     main()

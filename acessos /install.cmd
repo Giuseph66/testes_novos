@@ -15,7 +15,7 @@ if %errorLevel% EQU 0 (
   echo Node.js já está instalado. Versão:
   node -v
   echo.
-  echo Pronto! Agora execute o script instalar_projeto.cmd para continuar.
+  echo Pronto! Agora execute o script instalar_pro.exe para continuar.
   pause
   exit /b 0
 )
