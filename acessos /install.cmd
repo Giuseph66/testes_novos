@@ -11,16 +11,13 @@ if %errorLevel% NEQ 0 (
 
 :: 2) Garante TLS 1.2 para download via PowerShell
 echo 🔧 Configurando TLS 1.2...
-powershell -NoProfile -Command ^
-  "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12"
+powershell -NoProfile -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12"
 
 :: 3) Instala Chocolatey se não existir
 where choco >nul 2>&1
 if %errorLevel% NEQ 0 (
   echo 🍫 Instalando Chocolatey...
-  powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command ^
-    "Set-ExecutionPolicy Bypass -Scope Process -Force; ^
-     iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
+  powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
 ) else (
   echo 🍫 Chocolatey já instalado.
 )
