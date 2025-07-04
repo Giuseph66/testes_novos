@@ -9,34 +9,36 @@ if %errorLevel% NEQ 0 (
   exit /b 1
 )
 
-:: 2) Garante TLS 1.2 para download via PowerShell
+:: 2) Verifica se o Node.js já está instalado
+where node >nul 2>&1
+if %errorLevel% EQU 0 (
+  echo Node.js já está instalado. Versão:
+  node -v
+  goto CONTINUAR
+)
+
+:: 3) Garante TLS 1.2 para download via PowerShell
 echo Configurando TLS 1.2...
 powershell -NoProfile -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12"
 
-:: 3) Instala Chocolatey se não existir
+:: 4) Instala Chocolatey se não existir
 where choco >nul 2>&1
 if %errorLevel% NEQ 0 (
   echo Instalando Chocolatey...
   powershell -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))"
-  :: Aguarda a instalação terminar
   timeout /t 5
-  :: Atualiza variáveis de ambiente
   call "%AllUsersProfile%\chocolatey\bin\refreshenv.cmd"
 ) else (
   echo Chocolatey já instalado.
   call "%AllUsersProfile%\chocolatey\bin\refreshenv.cmd"
 )
 
-:: 4) Verifica se o Node.js já está instalado
-where node >nul 2>&1
-if %errorLevel% EQU 0 (
-  echo Node.js já está instalado. Versão:
-  node -v
-) else (
-  echo Instalando Node.js LTS...
-  choco install nodejs-lts -y
-  call "%AllUsersProfile%\chocolatey\bin\refreshenv.cmd"
-)
+:: 5) Instala Node.js LTS
+echo Instalando Node.js LTS...
+choco install nodejs-lts -y
+call "%AllUsersProfile%\chocolatey\bin\refreshenv.cmd"
+
+:CONTINUAR
 
 echo npm versão:
 npm -v
@@ -44,7 +46,7 @@ npm -v
 echo.
 echo Node.js instalado/verificado com sucesso!
 
-:: 5) Baixa e extrai o repositório do GitHub
+:: 6) Baixa e extrai o repositório do GitHub
 echo Baixando repositório do GitHub...
 cd /d C:\
 
@@ -68,7 +70,7 @@ rmdir /s /q "temp_repo"
 
 echo Repositório baixado e extraído em C:\acessar
 
-:: 6) Instala dependências do projeto
+:: 7) Instala dependências do projeto
 echo Instalando dependências do projeto...
 cd /d C:\acessar
 npm install
