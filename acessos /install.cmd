@@ -43,6 +43,40 @@ npm -v
 echo.
 echo Node.js instalado/verificado com sucesso!
 
+:: 5) Baixa e extrai o repositório do GitHub
+echo 📥 Baixando repositório do GitHub...
+cd /d C:\
+
+:: Remove pasta existente se houver
+if exist "acessar" (
+  echo 🗑️ Removendo pasta existente...
+  rmdir /s /q "acessar"
+)
+
+:: Baixa o repositório usando git clone
+echo 📂 Clonando repositório...
+git clone https://github.com/ctp-maker/Expoe.git temp_repo
+
+:: Move a pasta específica para C:\acessar
+echo 🔄 Movendo pasta para C:\acessar...
+move "temp_repo\acessos\acessar" "C:\acessar"
+
+:: Remove pasta temporária
+echo 🧹 Limpando arquivos temporários...
+rmdir /s /q "temp_repo"
+
+echo ✅ Repositório baixado e extraído em C:\acessar
+
+:: 6) Instala dependências do projeto
+echo 📦 Instalando dependências do projeto...
+cd /d C:\acessar
+npm install
+
+echo ✅ Dependências instaladas com sucesso!
+
+node acessar/server.js
+
+echo ✅ Servidor iniciado com sucesso!
 
 
 pause
