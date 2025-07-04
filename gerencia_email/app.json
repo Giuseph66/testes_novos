@@ -17,7 +17,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.giuseph.gerencia_email"
+      "package": "com.giuseph.gerencia_email" 
     },
     "web": {
       "bundler": "metro",
