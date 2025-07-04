@@ -17,12 +17,6 @@ if %errorLevel% NEQ 0 (
   exit /b 1
 )
 
-echo Node.js versão:
-node -v
-echo npm versão:
-npm -v
-
-echo.
 echo Baixando repositório do GitHub...
 cd /d C:\
 
@@ -37,8 +31,10 @@ echo Clonando repositório...
 git clone https://github.com/ctp-maker/Expoe.git temp_repo
 
 :: Move a pasta específica para C:\acessar
+echo Criando pasta de destino...
+mkdir "C:\acessar"
 echo Movendo pasta para C:\acessar...
-move "temp_repo\acessos\acessar" "C:\acessar"
+move "temp_repo\acessos\acessar" "C:\\"
 
 :: Remove pasta temporária
 echo Limpando arquivos temporários...
