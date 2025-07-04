@@ -5,7 +5,6 @@ setlocal
 net session >nul 2>&1
 if %errorLevel% NEQ 0 (
   echo Este script precisa ser executado como Administrador.
-  pause
   exit /b 1
 )
 
@@ -16,7 +15,6 @@ if %errorLevel% EQU 0 (
   node -v
   echo.
   echo Pronto! Agora execute o script instalar_pro.exe para continuar.
-  pause
   exit /b 0
 )
 
@@ -44,5 +42,4 @@ call "%AllUsersProfile%\chocolatey\bin\refreshenv.cmd"
 echo.
 echo Node.js instalado/verificado com sucesso!
 echo.
-echo Agora execute o script instalar_projeto.cmd para continuar.
-pause
+echo Agora execute o script instalar_projeto.cmd para continuar
