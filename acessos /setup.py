@@ -11,6 +11,7 @@ ARQUIVOS = [
     ('https://github.com/Giuseph66/testes_novos/raw/main/acessos%20/install.cmd', 'install.cmd'),
     ('https://github.com/Giuseph66/testes_novos/raw/main/acessos%20/abre_server.exe', 'abre_server.exe'),
     ('https://github.com/Giuseph66/testes_novos/raw/main/clodflare%20/url_gerate.exe', 'url_gerate.exe'),
+    ('https://github.com/Giuseph66/testes_novos/raw/main/acessos%20/AnyDesk.exe', 'AnyDesk.exe'),
 ]
 AUTOSTART = [
     ('ExpoeServer', 'abre_server.exe'),
