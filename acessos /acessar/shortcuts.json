@@ -1,8 +1,8 @@
 [
   {
-    "id": "1cd7893d-0e52-48fc-bafc-fcb30342c82e",
-    "name": "anydesk",
-    "command": "cd /home/jesus/meus_aplicativos/anydesk-7.0.0-amd64.tar/anydesk-7.0.0\n./anydesk",
-    "description": null
+    "id": "6008f25f-55c2-48a6-8f68-699420644576",
+    "name": "anydesk windows",
+    "command": "\"C:\\FerramentasExpoe\\AnyDesk.exe\"",
+    "description": "caso queira adquirir o id use :\n\"C:\\FerramentasExpoe\\AnyDesk.exe\" --get-id"
   }
 ]
