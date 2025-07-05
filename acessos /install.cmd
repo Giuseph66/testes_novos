@@ -43,3 +43,4 @@ echo.
 echo Node.js instalado/verificado com sucesso!
 echo.
 echo Agora execute o script instalar_projeto.cmd para continuar
+

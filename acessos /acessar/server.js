@@ -118,6 +118,9 @@ app.post('/api/exec', async (req, res) => {
 // ----- ROTAS PARA MONITORES DE SERVIÇO -----
 const MONITORS_FILE_PATH = path.join(__dirname, 'monitors.json');
 
+// ----- ROTAS PARA ATALHOS DE COMANDOS -----
+const SHORTCUTS_FILE_PATH = path.join(__dirname, 'shortcuts.json');
+
 const readMonitors = () => {
     try {
         if (fs.existsSync(MONITORS_FILE_PATH)) {
@@ -135,6 +138,26 @@ const writeMonitors = (data) => {
         fs.writeFileSync(MONITORS_FILE_PATH, JSON.stringify(data, null, 2));
     } catch (e) {
         console.error("Erro ao escrever em monitors.json:", e);
+    }
+};
+
+const readShortcuts = () => {
+    try {
+        if (fs.existsSync(SHORTCUTS_FILE_PATH)) {
+            const data = fs.readFileSync(SHORTCUTS_FILE_PATH, 'utf8');
+            return JSON.parse(data);
+        }
+    } catch (e) {
+        console.error("Erro ao ler shortcuts.json:", e);
+    }
+    return [];
+};
+
+const writeShortcuts = (data) => {
+    try {
+        fs.writeFileSync(SHORTCUTS_FILE_PATH, JSON.stringify(data, null, 2));
+    } catch (e) {
+        console.error("Erro ao escrever em shortcuts.json:", e);
     }
 };
 
@@ -485,4 +508,111 @@ app.get('/info', (req, res) => {
   const hostname = os.hostname();
   const datetime = new Date().toLocaleString('pt-BR', { hour12: false });
   res.json({ hostname, datetime });
+});
+
+// Obter todos os atalhos
+app.get('/api/shortcuts', (req, res) => {
+    res.json(readShortcuts());
+});
+
+// Adicionar ou atualizar um atalho
+app.post('/api/shortcuts', (req, res) => {
+    const shortcuts = readShortcuts();
+    const newShortcut = req.body;
+    
+    if (!newShortcut.id) {
+        newShortcut.id = uuidv4();
+    }
+
+    const index = shortcuts.findIndex(s => s.id === newShortcut.id);
+    if (index !== -1) {
+        shortcuts[index] = newShortcut; // Atualiza
+    } else {
+        shortcuts.push(newShortcut); // Adiciona
+    }
+    
+    writeShortcuts(shortcuts);
+    res.status(201).json(newShortcut);
+});
+
+// Deletar um atalho
+app.delete('/api/shortcuts/:id', (req, res) => {
+    let shortcuts = readShortcuts();
+    shortcuts = shortcuts.filter(s => s.id !== req.params.id);
+    writeShortcuts(shortcuts);
+    res.status(204).send();
+});
+
+// Executar um atalho
+app.post('/api/shortcuts/execute', async (req, res) => {
+    const { shortcutId } = req.body;
+    const shortcuts = readShortcuts();
+    const shortcut = shortcuts.find(s => s.id === shortcutId);
+
+    if (!shortcut) {
+        return res.status(404).json({ error: 'Atalho não encontrado.' });
+    }
+
+    console.log(`Executando atalho '${shortcut.name}' com o comando: ${shortcut.command}`);
+
+    try {
+        // Separa os comandos por quebra de linha (como nos monitores)
+        const commands = shortcut.command.split('\n').map(cmd => cmd.trim()).filter(cmd => cmd !== '');
+        
+        if (commands.length === 0) {
+            throw new Error('Nenhum comando fornecido.');
+        }
+
+        let currentWorkingDir = __dirname; // Começa no diretório do projeto
+
+        // Processa comandos cd primeiro para determinar o diretório final
+        for (const command of commands) {
+            if (command.startsWith('cd ')) {
+                const targetDir = command.substring(3).trim();
+                const newPath = path.resolve(currentWorkingDir, targetDir);
+                
+                if (fs.existsSync(newPath) && fs.statSync(newPath).isDirectory()) {
+                    currentWorkingDir = newPath;
+                    console.log(`Diretório de trabalho alterado para: ${currentWorkingDir}`);
+                } else {
+                    throw new Error(`Diretório não encontrado: ${newPath}`);
+                }
+            }
+        }
+
+        // Executa o último comando (não-cd) em background
+        const lastCommand = commands.filter(cmd => !cmd.startsWith('cd ')).pop();
+        
+        if (lastCommand) {
+            console.log(`Executando comando em background: '${lastCommand}' no diretório: ${currentWorkingDir}`);
+            
+            // Executa em background sem esperar pela saída
+            exec(lastCommand, { 
+                cwd: currentWorkingDir,
+                detached: true, // Executa em processo separado
+                stdio: 'ignore' // Ignora stdin, stdout, stderr
+            }, (err) => {
+                if (err) {
+                    console.error(`Erro ao executar comando em background: ${err.message}`);
+                } else {
+                    console.log(`Comando '${lastCommand}' iniciado em background com sucesso.`);
+                }
+            });
+            
+            // Responde imediatamente sem esperar pela execução
+            res.json({ 
+                message: `Comando ${shortcut.name} iniciado em background.`,
+                output: `Comando executado: ${lastCommand}`
+            });
+        } else {
+            throw new Error('Nenhum comando para executar (apenas comandos cd encontrados).');
+        }
+        
+    } catch (error) {
+        console.error(`Falha ao executar atalho '${shortcut.name}'.`, error);
+        res.status(500).json({ 
+            error: `Falha ao executar o comando ${shortcut.name}.`,
+            details: error.message
+        });
+    }
 }); 

@@ -65,6 +65,19 @@
               <!-- Os cards dos monitores serão inseridos aqui pelo JS -->
           </div>
         </div>
+
+        <!-- Seção de Atalhos de Comandos -->
+        <div class="admin-locked" id="shortcutsSection">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+              <h3 class="mb-0">Atalhos de Comandos</h3>
+              <button class="btn btn-primary" id="addShortcutBtn" data-bs-toggle="modal" data-bs-target="#shortcutModal">
+                  Adicionar Novo Atalho
+              </button>
+          </div>
+          <div id="shortcutsContainer" class="row">
+              <!-- Os cards dos atalhos serão inseridos aqui pelo JS -->
+          </div>
+        </div>
       </div>
 
       <!-- Coluna da Direita: Métricas e Histórico -->
@@ -198,6 +211,41 @@
           <button type="button" class="btn btn-danger me-auto" id="deleteMonitorBtn">Deletar</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           <button type="button" class="btn btn-primary" id="saveMonitorBtn">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para Adicionar/Editar Atalho -->
+  <div class="modal fade" id="shortcutModal" tabindex="-1" aria-labelledby="shortcutModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="shortcutModalLabel">Configurar Atalho</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="shortcutForm">
+            <input type="hidden" id="shortcutId">
+            <div class="mb-3">
+              <label for="shortcutName" class="form-label">Nome do Atalho</label>
+              <input type="text" class="form-control" id="shortcutName" required>
+            </div>
+            <div class="mb-3">
+              <label for="shortcutCommand" class="form-label">Comandos</label>
+              <textarea class="form-control" id="shortcutCommand" rows="3" required placeholder="Ex:&#10;cd /home/user/project&#10;npm start"></textarea>
+              <div class="form-text">Digite um comando por linha. Use 'cd diretório' para mudar de pasta.</div>
+            </div>
+            <div class="mb-3">
+              <label for="shortcutDescription" class="form-label">Descrição (opcional)</label>
+              <textarea class="form-control" id="shortcutDescription" rows="2" placeholder="Descreva o que este comando faz..."></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger me-auto" id="deleteShortcutBtn">Deletar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary" id="saveShortcutBtn">Salvar</button>
         </div>
       </div>
     </div>

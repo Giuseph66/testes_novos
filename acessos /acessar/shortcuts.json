@@ -1,0 +1,8 @@
+[
+  {
+    "id": "1cd7893d-0e52-48fc-bafc-fcb30342c82e",
+    "name": "anydesk",
+    "command": "cd /home/jesus/meus_aplicativos/anydesk-7.0.0-amd64.tar/anydesk-7.0.0\n./anydesk",
+    "description": null
+  }
+]
