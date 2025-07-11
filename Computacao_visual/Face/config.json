@@ -1,0 +1,10 @@
+{
+  "tolerance": 0.6,
+  "frame_skip": 3,
+  "camera_width": 640,
+  "camera_height": 480,
+  "camera_fps": 30,
+  "modo_detalhado": true,
+  "pasta_fotos": "fotos",
+  "interface_tema": "light"
+}
